@@ -6,6 +6,7 @@ import com.altice.domain.dto.ProductDTO;
 import com.altice.domain.enums.EnumErrorCode;
 import com.altice.domain.mappers.ProductDomainMapper;
 import com.altice.domain.repositories.IProductRepository;
+import com.altice.domain.utils.StringUtils;
 import com.altice.domain.utils.exception.AlticeException;
 
 public class UpdatedProduct {
@@ -18,7 +19,11 @@ public class UpdatedProduct {
 
     public ProductDTO execute(ProductDTO productUpdated, String id) {
         if (productUpdated == null) {
-            throw new AlticeException(EnumErrorCode.REQUIRED_OBJECT, productUpdated);
+            throw new AlticeException(EnumErrorCode.REQUIRED_OBJECT_FOR, "product", "updated product");
+        }
+
+        if (StringUtils.isNullOrEmpty(id)) {
+            throw new AlticeException(EnumErrorCode.REQUIRED_FIELD_FOR, "id", "updated product");
         }
 
         var internalProduct = productRepository.findById(UUID.fromString(id));
@@ -29,8 +34,7 @@ public class UpdatedProduct {
 
         productUpdated.setId(internalProduct.getId().getValue().toString());
 
-        var productBo = ProductDomainMapper.toBO(productUpdated);
-        var response = productRepository.updated(productBo);
+        var response = productRepository.updated(ProductDomainMapper.toBO(productUpdated));
         return ProductDomainMapper.toDTO(response);
     }
 }

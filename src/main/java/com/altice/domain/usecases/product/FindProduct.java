@@ -6,6 +6,7 @@ import com.altice.domain.dto.ProductDTO;
 import com.altice.domain.enums.EnumErrorCode;
 import com.altice.domain.mappers.ProductDomainMapper;
 import com.altice.domain.repositories.IProductRepository;
+import com.altice.domain.utils.StringUtils;
 import com.altice.domain.utils.exception.AlticeException;
 
 public class FindProduct {
@@ -17,8 +18,8 @@ public class FindProduct {
     }
 
     public ProductDTO execute(String id) {
-        if (id == null) {
-            throw new AlticeException(EnumErrorCode.REQUIRED_FIELD, "ID");
+        if (StringUtils.isNullOrEmpty(id)) {
+            throw new AlticeException(EnumErrorCode.REQUIRED_FIELD_FOR, "id", "find product");
         }
 
         var response = productRepository.findById(UUID.fromString(id));

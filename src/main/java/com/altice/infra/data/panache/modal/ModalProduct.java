@@ -10,31 +10,31 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "at_product")
+@Table(name = "AT_PRODUCT")
 public class ModalProduct extends PanacheEntityBase {
-
+    
     @Id
     private UUID id;
 
-    @Column(unique = true)
+    @Column(name = "CODE", unique = true)
     private String code;
 
-    @Column(name = "description", nullable = false, length = 200)
+    @Column(name = "DESCRIPTION", nullable = false, length = 200)
     private String description;
 
-    @Column(name = "acquirer_id", length = 200)
+    @Column(name = "ACQUIRER_ID", length = 200)
     private String acquirerId;
 
-    @Column(name = "quantity_stock", nullable = false)
+    @Column(name = "STOCK_QUANTITY", nullable = false)
     private Long stockQuantity;
 
-    @Column(name = "reserved_quantity", nullable = false)
+    @Column(name = "RESERVED_QUANTITY", nullable = false)
     private Long reservedQuantity;
 
-    @Column(name = "price_cost", nullable = false, precision = 15, scale = 2)
+    @Column(name = "PRICE_COST", nullable = false, precision = 15, scale = 2)
     private BigDecimal priceCost;
-    
-    @Column(name = "price", nullable = false, precision = 15, scale = 2)
+
+    @Column(name = "PRICE", nullable = false, precision = 15, scale = 2)
     private BigDecimal price;
 
     public UUID getId() {
@@ -100,7 +100,5 @@ public class ModalProduct extends PanacheEntityBase {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
-    
 
 }
