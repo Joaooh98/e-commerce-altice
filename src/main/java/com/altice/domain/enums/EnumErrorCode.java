@@ -18,7 +18,13 @@ public enum EnumErrorCode implements IEnum {
     REQUIRED_FIELD("009", "The field ({0}) is required!", HttpStatus.SC_BAD_REQUEST),
     NOT_STOCK("010", "Not enough stock of product ({0})", HttpStatus.SC_BAD_REQUEST),
     ITEM_ALREADY_EXISTS("010", "Item already exists in cart : ({0}) ", HttpStatus.SC_BAD_REQUEST),
-    ;
+    CART_IS_EMPTY("011", "Cannot checkout empty cart", HttpStatus.SC_BAD_REQUEST),
+    CART_MUST_HAVE_USER("012", "Cart must be associated with a user for checkout", HttpStatus.SC_BAD_REQUEST),
+    INSUFFICIENT_STOCK("013", "Insufficient stock for product ({0}). Available: ({1}), Requested: ({2})",
+            HttpStatus.SC_BAD_REQUEST),
+    PAYMENT_PROCESSING_FAILED("014", "Payment processing failed: ({0})", HttpStatus.SC_BAD_REQUEST),
+    INVALID_PAYMENT_TYPE("015", "Invalid payment type: ({0})", HttpStatus.SC_BAD_REQUEST),
+    CART_ALREADY_CHECKED_OUT("016", "Cart ({0}) has already been checked out", HttpStatus.SC_BAD_REQUEST);
 
     private final String key;
 

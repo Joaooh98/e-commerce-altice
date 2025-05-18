@@ -2,11 +2,10 @@ package com.altice.service;
 
 import java.util.UUID;
 
-import org.jboss.logging.Logger;
-
 import com.altice.domain.enums.EnumErrorCode;
 import com.altice.domain.utils.StringUtils;
 import com.altice.domain.utils.exception.AlticeException;
+import com.altice.infra.data.panache.repositories.CheckoutRepository;
 import com.altice.infra.data.panache.repositories.ProductRepository;
 import com.altice.infra.data.panache.repositories.ShoppingCartRepository;
 import com.altice.infra.data.panache.repositories.UserRepository;
@@ -25,6 +24,9 @@ public abstract class AbstractService {
     @Inject
     ShoppingCartRepository cartRepository;
 
+    @Inject
+    CheckoutRepository checkoutRepository;
+
     // services
 
     @Inject
@@ -34,7 +36,7 @@ public abstract class AbstractService {
     UserService userService;
 
     @Inject
-    Logger logger;
+    CheckoutService checkoutService;
 
     public static boolean isValidUuid(String uuidStr) {
         if (uuidStr == null || uuidStr.trim().isEmpty()) {
