@@ -1,5 +1,6 @@
 package com.altice.presentation.controller;
 
+import com.altice.service.AnalyticService;
 import com.altice.service.CheckoutService;
 import com.altice.service.ProductService;
 import com.altice.service.ShoppingCartService;
@@ -20,5 +21,8 @@ public class AbstractController {
 
     @Inject
     CheckoutService checkoutService;
+
+    @Inject
+    AnalyticService analyticService;
 
 }

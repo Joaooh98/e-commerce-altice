@@ -38,6 +38,9 @@ public abstract class AbstractService {
     @Inject
     CheckoutService checkoutService;
 
+    @Inject
+    AnalyticService analyticService;
+
     public static boolean isValidUuid(String uuidStr) {
         if (uuidStr == null || uuidStr.trim().isEmpty()) {
             return false;
