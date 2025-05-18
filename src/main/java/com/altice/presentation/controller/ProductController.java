@@ -6,8 +6,8 @@ import com.altice.domain.dto.ProductDTO;
 
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
@@ -22,7 +22,7 @@ public class ProductController extends AbstractController {
     }
 
     @GET
-    public Response findAll(@QueryParam("category") String category, @QueryParam("sub-category") String subCategory) {
+    public Response findAll(@QueryParam("category") String category, @QueryParam("subCategory") String subCategory) {
         List<ProductDTO> products = productService.findAll(category, subCategory);
         return Response.ok(products).build();
     }
@@ -41,7 +41,7 @@ public class ProductController extends AbstractController {
         return Response.ok().build();
     }
 
-    @PATCH
+    @PUT
     @Path("/id")
     public Response updatedById(ProductDTO productDto, @QueryParam("id") String id) {
         return Response.ok(productService.updatedById(productDto, id)).build();

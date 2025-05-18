@@ -51,6 +51,13 @@ public class ShoppingCartService extends AbstractService {
         return new UpdatedCart(cartRepository).execute(cart, id);
     }
 
+    @Transactional
+    public ShoppingCartDTO updatedById(ShoppingCartDTO cart, String id) {
+        validateUUID(id);
+        defineParamsCart(cart, true);
+        return new UpdatedCart(cartRepository).execute(cart, id);
+    }
+
     public ShoppingCartDTO clearCart(String id) {
         ShoppingCartDTO cart = findById(id);
         cart.setItems(new ArrayList<>());

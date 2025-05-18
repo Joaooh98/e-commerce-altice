@@ -10,6 +10,7 @@ import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
@@ -35,9 +36,9 @@ public class ShoppingCartController extends AbstractController {
         return Response.ok().build();
     }
 
-    @PATCH
-    public Response updatedCard(ShoppingCartDTO cart, @QueryParam("id") String id, @QueryParam("updatedItems") boolean updatedItems) {
-        return Response.ok(shoppingCartService.updatedById(cart, id, updatedItems)).build();
+    @PUT
+    public Response updatedCart(ShoppingCartDTO cart, @QueryParam("id") String id) {
+        return Response.ok(shoppingCartService.updatedById(cart, id)).build();
     }
 
     @PATCH
@@ -47,25 +48,25 @@ public class ShoppingCartController extends AbstractController {
     }
 
     @PATCH
-    @Path("remove-item")
-    public Response removeItems(List<ItemDTO> items, @QueryParam("id-cart") String id) {
+    @Path("remove/item")
+    public Response removeItems(List<ItemDTO> items, @QueryParam("idCart") String id) {
         return Response.ok(shoppingCartService.removeItems(items, id)).build();
     }
 
     @PATCH
     @Path("add")
-    public Response addItems(List<ItemDTO> items, @QueryParam("id-cart") String id) {
+    public Response addItems(List<ItemDTO> items, @QueryParam("idCart") String id) {
         return Response.ok(shoppingCartService.addItems(items, id)).build();
     }
 
     @PATCH
-    @Path("add-quantity")
-    public Response addQuantityItems(List<ItemDTO> items, @QueryParam("id-cart") String id) {
+    @Path("add/quantity")
+    public Response addQuantityItems(List<ItemDTO> items, @QueryParam("idCart") String id) {
         return Response.ok(shoppingCartService.addQuantityItems(items, id)).build();
     }
 
     @PATCH
-    @Path("add-user")
+    @Path("add/user")
     public Response addUser(AddUserDTO inputAddUser) {
         return Response.ok(shoppingCartService.addUser(inputAddUser)).build();
     }
