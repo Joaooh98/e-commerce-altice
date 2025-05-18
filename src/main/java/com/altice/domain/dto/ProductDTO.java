@@ -8,13 +8,15 @@ public class ProductDTO {
 
     private String code;
 
+    private String category;
+
+    private String subCategory;
+
     private String description;
 
     private String acquirerId;
 
-    private Long stockQuantity;
-
-    private Long reservedQuantity;
+    private Integer stockQuantity;
 
     private BigDecimal priceCost;
 
@@ -52,20 +54,12 @@ public class ProductDTO {
         this.acquirerId = acquirerId;
     }
 
-    public Long getStockQuantity() {
+    public Integer getStockQuantity() {
         return stockQuantity;
     }
 
-    public void setStockQuantity(Long stockQuantity) {
+    public void setStockQuantity(Integer stockQuantity) {
         this.stockQuantity = stockQuantity;
-    }
-
-    public Long getReservedQuantity() {
-        return reservedQuantity;
-    }
-
-    public void setReservedQuantity(Long reservedQuantity) {
-        this.reservedQuantity = reservedQuantity;
     }
 
     public BigDecimal getPriceCost() {
@@ -84,5 +78,19 @@ public class ProductDTO {
         this.price = price;
     }
 
-    
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
 }

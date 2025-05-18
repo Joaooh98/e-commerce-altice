@@ -21,20 +21,23 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "AT_SHOPPING_CART")
-public class ModalShoppingCart  extends PanacheEntityBase {
+public class ModalShoppingCart extends PanacheEntityBase {
 
     @Id
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = true)
     private ModalUser user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ModalProductCart> productCart;
 
     @Column(name = "AMOUNT", nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
+
+    @Column(name = "STATUS")
+    private String status;
 
     @CreationTimestamp
     @Column(name = "CREATED_AT", updatable = false)
@@ -92,4 +95,11 @@ public class ModalShoppingCart  extends PanacheEntityBase {
         this.user = user;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -9,7 +9,6 @@ import com.altice.domain.bo.ShoppingCartBO;
 import com.altice.domain.dto.ItemDTO;
 import com.altice.domain.dto.ShoppingCartDTO;
 import com.altice.domain.enums.EnumShoppingStatus;
-import com.altice.domain.utils.StringUtils;
 import com.altice.domain.vo.UuidVO;
 
 public class ShoppingCartDomainMapper {
@@ -22,8 +21,7 @@ public class ShoppingCartDomainMapper {
                 .id(new UuidVO(dto.getId()))
                 .user(dto.getUser() != null ? UserDomainMapper.toBO(dto.getUser()) : null)
                 .items(toItemsBO(dto.getItems()))
-                .status(StringUtils.isNotNullOrEmpty(dto.getStatus()) ? EnumShoppingStatus.parseByKey(dto.getStatus())
-                        : EnumShoppingStatus.ACTIVE)
+                .status(EnumShoppingStatus.parseByKey(dto.getStatus()))
                 .amount(dto.getAmount())
                 .build();
     }
@@ -33,7 +31,7 @@ public class ShoppingCartDomainMapper {
         if (bo == null) {
             return null;
         }
-        
+
         var dto = new ShoppingCartDTO();
 
         dto.setId(bo.getId().getValue().toString());

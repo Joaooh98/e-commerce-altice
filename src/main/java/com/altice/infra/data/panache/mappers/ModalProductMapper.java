@@ -1,7 +1,9 @@
 package com.altice.infra.data.panache.mappers;
 
 import com.altice.domain.bo.ProductBO;
+import com.altice.domain.enums.EnumCategoryProduct;
 import com.altice.domain.enums.EnumErrorCode;
+import com.altice.domain.enums.EnumSubCategoryProduct;
 import com.altice.domain.utils.exception.AlticeException;
 import com.altice.domain.vo.UuidVO;
 import com.altice.infra.data.panache.modal.ModalProduct;
@@ -22,9 +24,10 @@ public abstract class ModalProductMapper {
         modal.setDescription(bo.getDescription());
         modal.setAcquirerId(bo.getAcquirerId());
         modal.setStockQuantity(bo.getStockQuantity());
-        modal.setReservedQuantity(bo.getReservedQuantity());
         modal.setPriceCost(bo.getPriceCost());
         modal.setPrice(bo.getPrice());
+        modal.setCategory(bo.getCategory().getKey());
+        modal.setSubCategory(bo.getSubCategory().getKey());
 
         return modal;
     }
@@ -40,9 +43,10 @@ public abstract class ModalProductMapper {
                 .description(modal.getDescription())
                 .acquirerId(modal.getAcquirerId())
                 .stockQuantity(modal.getStockQuantity())
-                .reservedQuantity(modal.getReservedQuantity())
                 .priceCost(modal.getPriceCost())
                 .price(modal.getPrice())
+                .category(EnumCategoryProduct.parseByKey(modal.getCategory()))
+                .subCategory(EnumSubCategoryProduct.parseByKey(modal.getSubCategory()))
                 .build();
     }
 }

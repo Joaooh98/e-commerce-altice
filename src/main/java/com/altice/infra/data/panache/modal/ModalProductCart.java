@@ -1,6 +1,5 @@
 package com.altice.infra.data.panache.modal;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -26,12 +25,9 @@ public class ModalProductCart extends PanacheEntityBase {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CART_ID", nullable = false)
     private ModalShoppingCart cart;
-    
+
     @Column(name = "QUANTITY", nullable = false)
     private Integer quantity;
-    
-    @Column(name = "PRICE", nullable = false, precision = 15, scale = 2)
-    private BigDecimal price;
 
     public UUID getId() {
         return id;
@@ -65,12 +61,4 @@ public class ModalProductCart extends PanacheEntityBase {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-    
 }

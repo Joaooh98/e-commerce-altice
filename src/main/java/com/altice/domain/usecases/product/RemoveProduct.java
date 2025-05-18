@@ -16,6 +16,7 @@ public class RemoveProduct {
     }
 
     public void execute(String id) {
+        
         if (StringUtils.isNullOrEmpty(id)) {
              throw new AlticeException(EnumErrorCode.REQUIRED_FIELD_FOR, "id", "remove product");
         }

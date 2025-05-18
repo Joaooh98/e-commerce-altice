@@ -16,14 +16,14 @@ import jakarta.ws.rs.core.Response;
 public class ProductController extends AbstractController {
 
     @POST
-    public Response persist(ProductDTO productDto) {
-        ProductDTO product = productService.create(productDto);
-        return Response.ok(product).build();
+    public Response persist(List<ProductDTO> products) {
+        List<ProductDTO> response = productService.createProducts(products);
+        return Response.ok(response).build();
     }
 
     @GET
-    public Response findAll() {
-        List<ProductDTO> products = productService.findAll();
+    public Response findAll(@QueryParam("category") String category, @QueryParam("sub-category") String subCategory) {
+        List<ProductDTO> products = productService.findAll(category, subCategory);
         return Response.ok(products).build();
     }
 

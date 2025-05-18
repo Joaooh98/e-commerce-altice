@@ -2,6 +2,8 @@ package com.altice.domain.bo;
 
 import java.math.BigDecimal;
 
+import com.altice.domain.enums.EnumCategoryProduct;
+import com.altice.domain.enums.EnumSubCategoryProduct;
 import com.altice.domain.vo.UuidVO;
 
 public class ProductBO {
@@ -10,10 +12,11 @@ public class ProductBO {
     private final String code;
     private final String description;
     private final String acquirerId;
-    private final Long stockQuantity;
-    private final Long reservedQuantity;
+    private final Integer stockQuantity;
     private final BigDecimal priceCost;
     private final BigDecimal price;
+    private EnumCategoryProduct category;
+    private EnumSubCategoryProduct subCategory;
 
     private ProductBO(Builder builder) {
         this.id = builder.id;
@@ -21,9 +24,10 @@ public class ProductBO {
         this.description = builder.description;
         this.acquirerId = builder.acquirerId;
         this.stockQuantity = builder.stockQuantity;
-        this.reservedQuantity = builder.reservedQuantity;
         this.priceCost = builder.priceCost;
         this.price = builder.price;
+        this.category = builder.category;
+        this.subCategory = builder.subCategory;
     }
 
     public UuidVO getId() {
@@ -42,12 +46,8 @@ public class ProductBO {
         return acquirerId;
     }
 
-    public Long getStockQuantity() {
+    public Integer getStockQuantity() {
         return stockQuantity;
-    }
-
-    public Long getReservedQuantity() {
-        return reservedQuantity;
     }
 
     public BigDecimal getPriceCost() {
@@ -56,6 +56,14 @@ public class ProductBO {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public EnumCategoryProduct getCategory() {
+        return category;
+    }
+
+    public EnumSubCategoryProduct getSubCategory() {
+        return subCategory;
     }
 
     public static Builder builder() {
@@ -67,10 +75,11 @@ public class ProductBO {
         private String code;
         private String description;
         private String acquirerId;
-        private Long stockQuantity;
-        private Long reservedQuantity;
+        private Integer stockQuantity;
         private BigDecimal priceCost;
         private BigDecimal price;
+        private EnumCategoryProduct category;
+        private EnumSubCategoryProduct subCategory;
 
         public Builder id(UuidVO id) {
             this.id = id;
@@ -92,13 +101,8 @@ public class ProductBO {
             return this;
         }
 
-        public Builder stockQuantity(Long stockQuantity) {
+        public Builder stockQuantity(Integer stockQuantity) {
             this.stockQuantity = stockQuantity;
-            return this;
-        }
-
-        public Builder reservedQuantity(Long reservedQuantity) {
-            this.reservedQuantity = reservedQuantity;
             return this;
         }
 
@@ -109,6 +113,16 @@ public class ProductBO {
 
         public Builder price(BigDecimal price) {
             this.price = price;
+            return this;
+        }
+
+        public Builder category(EnumCategoryProduct category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder subCategory(EnumSubCategoryProduct subCategory) {
+            this.subCategory = subCategory;
             return this;
         }
 

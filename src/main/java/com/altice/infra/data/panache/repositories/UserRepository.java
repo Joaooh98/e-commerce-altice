@@ -48,7 +48,7 @@ public class UserRepository implements IUserRepository {
             var modal = ModalUser.findById(id);
 
             if (modal == null) {
-                throw new AlticeException(EnumErrorCode.OBJECT_NOT_FOUND, "User");
+                throw new AlticeException(EnumErrorCode.OBJECT_NOT_FOUND, "ModalUser");
             }
 
             modal.delete();
@@ -68,7 +68,7 @@ public class UserRepository implements IUserRepository {
             var existingModal = ModalUser.findById(bo.getId().getValue());
 
             if (existingModal == null) {
-                throw new AlticeException(EnumErrorCode.OBJECT_NOT_FOUND, "User");
+                throw new AlticeException(EnumErrorCode.OBJECT_NOT_FOUND, "ModalUser");
             }
 
             var updatedModal = ModalUserMapper.toModal(bo);

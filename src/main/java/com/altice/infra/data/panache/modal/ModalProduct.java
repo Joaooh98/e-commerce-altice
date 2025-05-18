@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "AT_PRODUCT")
 public class ModalProduct extends PanacheEntityBase {
-    
+
     @Id
     private UUID id;
 
@@ -26,16 +26,19 @@ public class ModalProduct extends PanacheEntityBase {
     private String acquirerId;
 
     @Column(name = "STOCK_QUANTITY", nullable = false)
-    private Long stockQuantity;
-
-    @Column(name = "RESERVED_QUANTITY", nullable = false)
-    private Long reservedQuantity;
+    private Integer stockQuantity;
 
     @Column(name = "PRICE_COST", nullable = false, precision = 15, scale = 2)
     private BigDecimal priceCost;
 
     @Column(name = "PRICE", nullable = false, precision = 15, scale = 2)
     private BigDecimal price;
+
+    @Column(name = "CATEGORY", length = 200)
+    private String category;
+
+    @Column(name = "SUB_CATEGORY", length = 200)
+    private String subCategory;
 
     public UUID getId() {
         return id;
@@ -69,20 +72,12 @@ public class ModalProduct extends PanacheEntityBase {
         this.acquirerId = acquirerId;
     }
 
-    public Long getStockQuantity() {
+    public Integer getStockQuantity() {
         return stockQuantity;
     }
 
-    public void setStockQuantity(Long stockQuantity) {
+    public void setStockQuantity(Integer stockQuantity) {
         this.stockQuantity = stockQuantity;
-    }
-
-    public Long getReservedQuantity() {
-        return reservedQuantity;
-    }
-
-    public void setReservedQuantity(Long reservedQuantity) {
-        this.reservedQuantity = reservedQuantity;
     }
 
     public BigDecimal getPriceCost() {
@@ -99,6 +94,22 @@ public class ModalProduct extends PanacheEntityBase {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 
 }

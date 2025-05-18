@@ -9,6 +9,7 @@ import com.altice.domain.usecases.product.FindProduct;
 import com.altice.domain.usecases.product.RemoveProduct;
 import com.altice.domain.usecases.product.UpdatedProduct;
 
+import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
@@ -16,12 +17,18 @@ import jakarta.transaction.Transactional;
 public class ProductService extends AbstractService {
 
     @Transactional
-    public ProductDTO create(ProductDTO product) {
-        return new CreateProduct(productRepository).execute(product);
+    public List<ProductDTO> createProducts(List<ProductDTO> products) {
+        CreateProduct createProduct = new CreateProduct(productRepository);
+        products.forEach(product -> {
+            var productNew = createProduct.execute(product);
+            product.setId(productNew.getId());
+        });
+        return products;
     }
 
-    public List<ProductDTO> findAll() {
-        return new FindAllProduct(productRepository).execute();
+    @CacheResult(cacheName = "products")
+    public List<ProductDTO> findAll(String category, String subCategory) {
+        return new FindAllProduct(productRepository).execute(category, subCategory);
     }
 
     public ProductDTO findById(String id) {

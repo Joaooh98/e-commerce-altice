@@ -15,7 +15,10 @@ public enum EnumErrorCode implements IEnum {
     INTERNAL_ERROR("005", "ERROR ({0})", HttpStatus.SC_BAD_REQUEST),
     OBJECT_NOT_FOUND("007", "The requested resource ({0}) was not found!", HttpStatus.SC_NOT_FOUND),
     INVALID_FORMAT_FIELD("008", "Invalid format ({0})", HttpStatus.SC_BAD_REQUEST),
-    REQUIRED_FIELD("009", "The field ({0}) is required!", HttpStatus.SC_BAD_REQUEST);
+    REQUIRED_FIELD("009", "The field ({0}) is required!", HttpStatus.SC_BAD_REQUEST),
+    NOT_STOCK("010", "Not enough stock of product ({0})", HttpStatus.SC_BAD_REQUEST),
+    ITEM_ALREADY_EXISTS("010", "Item already exists in cart : ({0}) ", HttpStatus.SC_BAD_REQUEST),
+    ;
 
     private final String key;
 

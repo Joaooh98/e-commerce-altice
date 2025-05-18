@@ -6,6 +6,7 @@ public enum EnumShoppingStatus implements IEnum {
 
     ACTIVE("ACTIVE", "active"),
     ABANDONED("ABANDONED", "abandoned"),
+    EMPTY("EMPTY", "empty"),
     CHECKED_OUT("CHECKED_OUT", "checked out");
 
     private final String key;

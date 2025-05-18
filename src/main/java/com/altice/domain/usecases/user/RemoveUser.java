@@ -16,10 +16,10 @@ public class RemoveUser {
     }
 
     public void execute(String id) {
+
         if (StringUtils.isNullOrEmpty(id)) {
             throw new AlticeException(EnumErrorCode.REQUIRED_OBJECT_FOR, "id", "remove user");
         }
-
         userRepository.remove(UUID.fromString(id));
     }
 }

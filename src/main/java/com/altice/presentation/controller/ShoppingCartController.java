@@ -1,6 +1,9 @@
 package com.altice.presentation.controller;
 
-import com.altice.domain.dto.ProductDTO;
+import java.util.List;
+
+import com.altice.domain.dto.AddUserDTO;
+import com.altice.domain.dto.ItemDTO;
 import com.altice.domain.dto.ShoppingCartDTO;
 
 import jakarta.ws.rs.DELETE;
@@ -27,15 +30,43 @@ public class ShoppingCartController extends AbstractController {
     }
 
     @DELETE
-    @Path("/id")
     public Response deleteById(@QueryParam("id") String id) {
         shoppingCartService.deleteById(id);
         return Response.ok().build();
     }
 
     @PATCH
-    @Path("/add-item")
-    public Response addItem(ProductDTO productDto, @QueryParam("id_shopping_cart") String idShoppingCart) {
-        return Response.ok(shoppingCartService.updatedById(productDto, idShoppingCart)).build();
+    public Response updatedCard(ShoppingCartDTO cart, @QueryParam("id") String id, @QueryParam("updatedItems") boolean updatedItems) {
+        return Response.ok(shoppingCartService.updatedById(cart, id, updatedItems)).build();
+    }
+
+    @PATCH
+    @Path("clear")
+    public Response clearCart(@QueryParam("id") String id) {
+        return Response.ok(shoppingCartService.clearCart(id)).build();
+    }
+
+    @PATCH
+    @Path("remove-item")
+    public Response removeItems(List<ItemDTO> items, @QueryParam("id-cart") String id) {
+        return Response.ok(shoppingCartService.removeItems(items, id)).build();
+    }
+
+    @PATCH
+    @Path("add")
+    public Response addItems(List<ItemDTO> items, @QueryParam("id-cart") String id) {
+        return Response.ok(shoppingCartService.addItems(items, id)).build();
+    }
+
+    @PATCH
+    @Path("add-quantity")
+    public Response addQuantityItems(List<ItemDTO> items, @QueryParam("id-cart") String id) {
+        return Response.ok(shoppingCartService.addQuantityItems(items, id)).build();
+    }
+
+    @PATCH
+    @Path("add-user")
+    public Response addUser(AddUserDTO inputAddUser) {
+        return Response.ok(shoppingCartService.addUser(inputAddUser)).build();
     }
 }
