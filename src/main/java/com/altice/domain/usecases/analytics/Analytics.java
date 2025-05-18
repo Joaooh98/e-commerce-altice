@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.altice.domain.bo.ItemBO;
 import com.altice.domain.bo.ProductBO;
 import com.altice.domain.bo.ShoppingCartBO;
-import com.altice.domain.dto.ProductStatusDTO;
+import com.altice.domain.dto.ItemDTO;
+import com.altice.domain.dto.ProductStatsDTO;
 import com.altice.domain.dto.TopItemsDTO;
+import com.altice.domain.mappers.ProductDomainMapper;
 import com.altice.domain.repositories.IShoppingCartRepository;
 
 public class Analytics {
@@ -33,15 +36,15 @@ public class Analytics {
             return createEmptyTopItems();
         }
 
-        Map<UUID, ProductStatusDTO> productStatsMap = new HashMap<>();
+        Map<UUID, ProductStatsDTO> productStatsMap = new HashMap<>();
         int totalItemsAnalyzed = 0;
 
         for (ShoppingCartBO cart : cartsWithItems) {
             for (ItemBO item : cart.getItems()) {
                 UUID productId = item.getProduct().getId().getValue();
 
-                ProductStatusDTO stats = productStatsMap.getOrDefault(productId,
-                        new ProductStatusDTO(item.getProduct()));
+                ProductStatsDTO stats = productStatsMap.getOrDefault(productId,
+                        new ProductStatsDTO(item.getProduct()));
 
                 stats.addItem(item.getQuantity());
                 productStatsMap.put(productId, stats);
@@ -49,14 +52,14 @@ public class Analytics {
             }
         }
 
-        // List<TopItemsDTO> topItems = productStatsMap.values().stream()
-        //         .sorted((a, b) -> Long.compare(b.totalQuantity, a.totalQuantity))
-        //         .limit(topCount)
-        //         .map(this::convertToTopItemInfo)
-        //         .collect(Collectors.toList());
+        List<ItemDTO> topItems = productStatsMap.values().stream()
+                .sorted((a, b) -> Long.compare(b.getTotalQuantity(), a.getTotalQuantity()))
+                .limit(topCount)
+                .map(this::convertToItemDTO)
+                .collect(Collectors.toList());
 
         TopItemsDTO result = new TopItemsDTO();
-        // result.setTopItems(topItems);
+        result.setTopItems(topItems);
         result.setTotalItemsAnalyzed(totalItemsAnalyzed);
         result.setAnalysisDate(LocalDateTime.now().toString());
 
@@ -71,18 +74,14 @@ public class Analytics {
         return result;
     }
 
-    private TopItemsDTO convertToTopItemInfo(ProductStatusDTO status) {
-        TopItemsDTO itemInfo = new TopItemsDTO();
+    private ItemDTO convertToItemDTO(ProductStatsDTO status) {
+        ItemDTO itemDTO = new ItemDTO();
         ProductBO product = status.getProduct();
-        // itemInfo.setProductId(product.getId().getValue().toString());
-        // itemInfo.setProductName(product.getDescription());
-        // itemInfo.setProductCode(product.getCode());
-        // itemInfo.setCategory(product.getCategory().getValue());
-        // itemInfo.setSubCategory(product.getSubCategory().getValue());
-        // itemInfo.setTotalQuantity(status.getTotalQuantity());
-        // itemInfo.setCartCount(status.getCartCount());
-        // itemInfo.setAverageQuantityPerCart(
-        //         Math.round((double) status.getTotalQuantity() / status.getCartCount() * 100.0) / 100.0);
-        return itemInfo;
+
+        itemDTO.setProduct(ProductDomainMapper.toDTO(product));
+        itemDTO.setQuantity((int) status.getTotalQuantity());
+        itemDTO.setId(UUID.randomUUID().toString());
+
+        return itemDTO;
     }
 }

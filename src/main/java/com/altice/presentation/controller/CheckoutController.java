@@ -13,7 +13,7 @@ import jakarta.ws.rs.core.Response;
 public class CheckoutController extends AbstractController {
 
     @POST
-    public Response createCheckout(@QueryParam("cart-id") String shoppingCartId) {
+    public Response createCheckout(@QueryParam("cartId") String shoppingCartId) {
         CheckoutDTO checkout = checkoutService.createCheckout(shoppingCartId);
         return Response.ok(checkout).build();
     }

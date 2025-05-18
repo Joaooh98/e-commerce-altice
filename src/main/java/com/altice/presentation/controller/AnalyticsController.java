@@ -16,50 +16,52 @@ public class AnalyticsController extends AbstractController {
     @GET
     @Path("/carts")
     public Response getCartAnalytics() {
-        CartAnalyticsDTO analytics = analyticService.getCartAnalytics();
-        return Response.ok(analytics).build();
+        try {
+            CartAnalyticsDTO analytics = analyticService.getCartAnalytics();
+            return Response.ok(analytics).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error getting cart analysis: " + e.getMessage())
+                    .build();
+        }
     }
 
     @GET
     @Path("/items/statistics")
     public Response getItemStatistics() {
-        ItemStatisticsDTO statistics = analyticService.getItemStatistics();
-        return Response.ok(statistics).build();
+        try {
+            ItemStatisticsDTO statistics = analyticService.getItemStatistics();
+            return Response.ok(statistics).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error getting item stats: " + e.getMessage())
+                    .build();
+        }
     }
 
     @GET
     @Path("/items/top")
     public Response getTopItems(@QueryParam("count") Integer count) {
-        TopItemsDTO topItems = analyticService.getTopItems(count);
-        return Response.ok(topItems).build();
-    }
-
-    @GET
-    @Path("/items/top5")
-    public Response getTop5Items() {
-        TopItemsDTO topItems = analyticService.getTop5Items();
-        return Response.ok(topItems).build();
-    }
-
-    @GET
-    @Path("/items/top10")
-    public Response getTop10Items() {
-        TopItemsDTO topItems = analyticService.getTop10Items();
-        return Response.ok(topItems).build();
+        try {
+            TopItemsDTO topItems = analyticService.getTopItems(count);
+            return Response.ok(topItems).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error getting top items: " + e.getMessage())
+                    .build();
+        }
     }
 
     @GET
     @Path("/dashboard")
     public Response getDashboard(@QueryParam("topItemsCount") Integer topItemsCount) {
-        CartAnalyticsDTO cartAnalytics = analyticService.getCartAnalytics();
-        ItemStatisticsDTO itemStatistics = analyticService.getItemStatistics();
-        TopItemsDTO topItems = analyticService.getTopItems(topItemsCount);
-
-        DashboardResponseDTO dashboard = new DashboardResponseDTO();
-        dashboard.setCartAnalytics(cartAnalytics);
-        dashboard.setItemStatistics(itemStatistics);
-        dashboard.setTopItems(topItems);
-
-        return Response.ok(dashboard).build();
+        try {
+            DashboardResponseDTO dashboard = analyticService.getDashboardAnalytic(topItemsCount);
+            return Response.ok(dashboard).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error getting dashboard: " + e.getMessage())
+                    .build();
+        }
     }
 }

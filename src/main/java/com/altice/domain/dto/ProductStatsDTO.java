@@ -2,16 +2,16 @@ package com.altice.domain.dto;
 
 import com.altice.domain.bo.ProductBO;
 
-public class ProductStatusDTO {
-    final ProductBO product;
-    long totalQuantity;
-    int cartCount;
+public class ProductStatsDTO {
+    private final ProductBO product;
+    private long totalQuantity;
+    private int cartCount;
 
-    public ProductStatusDTO(ProductBO product) {
-            this.product = product;
-            this.totalQuantity = 0;
-            this.cartCount = 0;
-        }
+    public ProductStatsDTO(ProductBO product) {
+        this.product = product;
+        this.totalQuantity = 0;
+        this.cartCount = 0;
+    }
 
     public void addItem(int quantity) {
         this.totalQuantity += quantity;
@@ -38,5 +38,10 @@ public class ProductStatusDTO {
         this.cartCount = cartCount;
     }
 
-    
+    public double getAverageQuantityPerCart() {
+        if (cartCount == 0) {
+            return 0.0;
+        }
+        return Math.round((double) totalQuantity / cartCount * 100.0) / 100.0;
+    }
 }

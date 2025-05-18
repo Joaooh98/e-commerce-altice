@@ -2,6 +2,7 @@ package com.altice.infra.data.panache.repositories;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.altice.domain.bo.ShoppingCartBO;
 import com.altice.domain.enums.EnumErrorCode;
@@ -87,8 +88,16 @@ public class ShoppingCartRepository implements IShoppingCartRepository {
 
     @Override
     public List<ShoppingCartBO> findAll() {
-        // consulta difenrenciada para trazar resultado do KPIs
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        try {
+            List<ModalShoppingCart> modalCarts = ModalShoppingCart.findAll().list();
+
+            return modalCarts.stream()
+                    .map(ModalShoppingCartMapper::toBO)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            throw new AlticeException(EnumErrorCode.INTERNAL_ERROR, e);
+        }
     }
 
 }

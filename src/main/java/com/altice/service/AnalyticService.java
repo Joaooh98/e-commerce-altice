@@ -6,34 +6,36 @@ import com.altice.domain.dto.TopItemsDTO;
 import com.altice.domain.usecases.analytics.Analytics;
 import com.altice.domain.usecases.analytics.CartAnalytics;
 import com.altice.domain.usecases.analytics.ItemStatistics;
+import com.altice.presentation.dto.DashboardResponseDTO;
 
-import io.quarkus.cache.CacheResult;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class AnalyticService extends AbstractService {
 
-    @CacheResult(cacheName = "cart-analytics")
     public CartAnalyticsDTO getCartAnalytics() {
         return new CartAnalytics(cartRepository).execute();
     }
 
-    @CacheResult(cacheName = "item-statistics")
     public ItemStatisticsDTO getItemStatistics() {
         return new ItemStatistics(cartRepository).execute();
     }
 
-    @CacheResult(cacheName = "top-items")
     public TopItemsDTO getTopItems(Integer topCount) {
         int count = (topCount != null && topCount > 0) ? topCount : 5;
         return new Analytics(cartRepository).execute(count);
     }
 
-    public TopItemsDTO getTop5Items() {
-        return getTopItems(5);
+    public DashboardResponseDTO getDashboardAnalytic(Integer topCount) {
+        CartAnalyticsDTO cartAnalytics = analyticService.getCartAnalytics();
+        ItemStatisticsDTO itemStatistics = analyticService.getItemStatistics();
+        TopItemsDTO topItems = analyticService.getTopItems(topCount);
+
+        DashboardResponseDTO dashboard = new DashboardResponseDTO();
+        dashboard.setCartAnalytics(cartAnalytics);
+        dashboard.setItemStatistics(itemStatistics);
+        dashboard.setTopItems(topItems);
+        return dashboard;
     }
 
-    public TopItemsDTO getTop10Items() {
-        return getTopItems(10);
-    }
 }

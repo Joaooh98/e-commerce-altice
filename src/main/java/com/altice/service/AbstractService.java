@@ -26,9 +26,12 @@ public abstract class AbstractService {
 
     @Inject
     CheckoutRepository checkoutRepository;
-
+    
     // services
 
+    @Inject
+    ShoppingCartService cartService;
+    
     @Inject
     ProductService productService;
 
