@@ -1,71 +1,98 @@
-# e-commerce-altice
+E-commerce Altice - Guia de Execução
+🐳 Docker Compose
+bash# 1. Compilar
+./mvnw clean package
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+# 2. Executar
+cd src/main/docker
+docker-compose up -d
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+# 3. Verificar
+☸️ Kubernetes
 
-## Running the application in dev mode
+kubectl create namespace altice-ecommerce
 
-You can run your application in dev mode that enables live coding using:
+bash# 1. Build da imagem
+./mvnw clean package
+docker build -f src/main/docker/Dockerfile.jvm -t altice-ecommerce:latest .
 
-```shell script
-./mvnw quarkus:dev
-```
+# 2. Deploy PostgreSQL
+kubectl apply -f k8s/postgres-k8s.yaml
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+# 3. Deploy da aplicação
+kubectl apply -f k8s/altice-app-k8s-final.yaml
 
-## Packaging and running the application
+# 4. Expor acesso
+kubectl port-forward service/altice-ecommerce-service 8091:8091 -n altice-ecommerce &
 
-The application can be packaged using:
+# 5. Verificar
+curl http://localhost:8091/q/health
+🔗 Acessos
 
-```shell script
-./mvnw package
-```
+API: http://localhost:8091
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+🧪 Teste da API
+bash# Criar usuário
+curl -X POST http://localhost:8091/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Maria Silva",
+    "email": "maria.silva@example.com",
+    "password": "senha_segura_123"
+  }'
+🚀 Funcionalidades da API
+👤 Usuários (/api/v1/users)
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+POST / - Criar usuário
+GET /{id} - Buscar usuário
+PATCH /{id} - Atualizar usuário
+DELETE /{id} - Remover usuário
 
-If you want to build an _über-jar_, execute the following command:
+📦 Produtos (/api/v1/products)
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+POST / - Criar produtos (múltiplos)
+GET / - Listar produtos (filtros: category, subCategory)
+GET /{id} - Buscar produto
+PUT /{id} - Atualizar produto
+DELETE /{id} - Remover produto
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+🛒 Carrinho (/api/v1/shopping-carts)
 
-## Creating a native executable
+POST / - Criar carrinho
+GET /{id} - Buscar carrinho
+PUT /{id} - Atualizar carrinho
+DELETE /{id} - Remover carrinho
+PATCH /{id}/clear - Limpar carrinho
+PATCH /{id}/items - Adicionar itens
+PATCH /{id}/items/remove - Remover itens
+PATCH /{id}/items/quantity - Atualizar quantidades
+PATCH /{id}/user - Associar usuário
 
-You can create a native executable using:
+💳 Checkout (/api/v1/checkout)
 
-```shell script
-./mvnw package -Dnative
-```
+POST /cart/{cartId} - Criar checkout
+POST /payment - Processar pagamento
+GET /{id} - Buscar checkout
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+    mbway
+    
+    APPROVED_PHONE = "912345678";  
+    REJECTED_PHONE = "900000000";   
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+    Card
 
-You can then execute your native executable with: `./target/e-commerce-altice-1.0.0-SNAPSHOT-runner`
+    APPROVED_CARD = "1234567890123456"
+    REJECTED_CARD = "0000000000000000"
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+📊 Analytics (/api/v1/analytics)
 
-## Related Guides
+GET /carts - Estatísticas de carrinhos
+GET /items/statistics - Estatísticas de itens
+GET /items/top - Produtos mais vendidos
+GET /dashboard - Dashboard completo
 
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- Kubernetes ([guide](https://quarkus.io/guides/kubernetes)): Generate Kubernetes resources from annotations
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
+🧹 Limpeza
+Docker Compose:
+bashdocker-compose down -v
+Kubernetes:
+bashkubectl delete namespace altice-ecommerce
