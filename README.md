@@ -43,10 +43,10 @@ curl http://localhost:8091/api/v1/products
 🔗 Acessos
 API: http://localhost:8091
 
-🧪 Teste da API
+## 🧪 Teste da API
 
- Criar usuário
-```
+### 1️⃣ Criar usuário
+```bash
 curl -X POST http://localhost:8091/api/v1/users \
   -H "Content-Type: application/json" \
   -d '{
@@ -55,6 +55,66 @@ curl -X POST http://localhost:8091/api/v1/users \
     "password": "senha_segura_123"
   }'
 ```
+
+### 2️⃣ Criar produto
+```bash
+curl -X POST http://localhost:8091/api/v1/products \
+  -H "Content-Type: application/json" \
+  -d '[{
+    "code": "monitor-gaming-01",
+    "category": "computing",
+    "subCategory": "monitors",
+    "description": "27-inch 4K Gaming Monitor",
+    "acquirerId": "fornecedor-lg",
+    "stockQuantity": 60,
+    "priceCost": 299.99,
+    "price": 449.99
+  }]'
+```
+
+### 3️⃣ Criar carrinho de compras
+
+**🔹 Carrinho vazio:**
+```bash
+curl -X POST http://localhost:8091/api/v1/shopping-carts \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+**🔹 Carrinho com itens:**
+```bash
+# Substituir pelos IDs reais retornados nos passos anteriores
+curl -X POST http://localhost:8091/api/v1/shopping-carts \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "seu-user-id-aqui",
+    "items": [
+      {
+        "productId": "seu-product-id-aqui",
+        "quantity": 1
+      }
+    ]
+  }'
+```
+
+**🔹 Adicionar itens ao carrinho existente:**
+```bash
+curl -X PATCH http://localhost:8091/api/v1/shopping-carts/{cartId}/items \
+  -H "Content-Type: application/json" \
+  -d '[
+    {
+      "productId": "seu-product-id-aqui",
+      "quantity": 1
+    }
+  ]'
+```
+
+### 4️⃣ Fazer checkout
+```bash
+curl -X POST http://localhost:8091/api/v1/checkout/cart/{cartId} \
+  -H "Content-Type: application/json"
+```
+
 ## 🚀 Funcionalidades da API
 
 ### 👤 Usuários (`/api/v1/users`)
