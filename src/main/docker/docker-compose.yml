@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: altice-postgres
+    environment:
+      POSTGRES_DB: altice_ecommerce
+      POSTGRES_USER: altice_user
+      POSTGRES_PASSWORD: altice_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - altice-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U altice_user -d altice_ecommerce"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  altice-app:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    container_name: altice-ecommerce
+    environment:
+      # Mesma base para dev e prod
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://postgres:5432/altice_ecommerce
+      QUARKUS_DATASOURCE_USERNAME: altice_user
+      QUARKUS_DATASOURCE_PASSWORD: altice_password
+      
+      # Aplicação
+      QUARKUS_HTTP_HOST: 0.0.0.0
+      QUARKUS_HTTP_PORT: 8091
+    ports:
+      - "8091:8091"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - altice-network
+    restart: unless-stopped
+
+networks:
+  altice-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

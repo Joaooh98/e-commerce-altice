@@ -1,0 +1,122 @@
+---
+# ConfigMap para configurações da aplicação
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: altice-app-config
+  namespace: altice-ecommerce
+data:
+  QUARKUS_HTTP_HOST: "0.0.0.0"
+  QUARKUS_HTTP_PORT: "8091"
+  QUARKUS_DATASOURCE_DB_KIND: "postgresql"
+  QUARKUS_DATASOURCE_JDBC_URL: "jdbc:postgresql://postgres-service:5432/altice_ecommerce"
+  QUARKUS_DATASOURCE_USERNAME: "altice_user"
+  QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION: "update"
+---
+# Secret para senha do banco
+apiVersion: v1
+kind: Secret
+metadata:
+  name: altice-app-secret
+  namespace: altice-ecommerce
+type: Opaque
+data:
+  database-password: YWx0aWNlX3Bhc3N3b3Jk  # altice_password
+---
+# Deployment da aplicação Quarkus (SEM HEALTH CHECKS)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: altice-ecommerce
+  namespace: altice-ecommerce
+  labels:
+    app: altice-ecommerce
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: altice-ecommerce
+  template:
+    metadata:
+      labels:
+        app: altice-ecommerce
+        version: v1
+    spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox:1.35
+        command: ['sh', '-c']
+        args:
+          - |
+            echo "Waiting for PostgreSQL..."
+            until nc -z postgres-service 5432; do
+              echo "PostgreSQL is not ready yet..."
+              sleep 2
+            done
+            echo "PostgreSQL is ready!"
+      containers:
+      - name: altice-ecommerce
+        image: altice-ecommerce:latest
+        imagePullPolicy: Never  # Para imagens locais do Docker
+        ports:
+        - containerPort: 8091
+          name: http
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: altice-app-config
+        env:
+        - name: QUARKUS_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: altice-app-secret
+              key: database-password
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        # REMOVIDO: livenessProbe, readinessProbe, startupProbe
+---
+# Service para expor a aplicação
+apiVersion: v1
+kind: Service
+metadata:
+  name: altice-ecommerce-service
+  namespace: altice-ecommerce
+  labels:
+    app: altice-ecommerce
+spec:
+  type: NodePort
+  selector:
+    app: altice-ecommerce
+  ports:
+  - name: http
+    port: 8091
+    targetPort: 8091
+    protocol: TCP
+    nodePort: 30091  # Porta externa para acesso
+---
+# Ingress (opcional - para acesso externo via domínio)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: altice-ecommerce-ingress
+  namespace: altice-ecommerce
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: altice-ecommerce.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: altice-ecommerce-service
+            port:
+              number: 8091
