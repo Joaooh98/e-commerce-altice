@@ -1,7 +1,8 @@
 E-commerce Altice - Guia de Execução
-  🐳 Docker Compose
-bash# 
-  1. Compilar
+
+🐳 Docker Compose
+
+# 1. Compilar
 ```shell
   ./mvnw clean package
 ```
@@ -11,13 +12,12 @@ cd src/main/docker
 docker-compose up -d
 ```
 
-# 3. Verificar
 ☸️ Kubernetes
 ```
 kubectl create namespace altice-ecommerce
 ```
  
- 1. Build da imagem
+# 1. Build da imagem
 ```
 ./mvnw clean package
 docker build -f src/main/docker/Dockerfile.jvm -t altice-ecommerce:latest .
